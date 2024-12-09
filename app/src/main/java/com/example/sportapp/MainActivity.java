@@ -1,6 +1,7 @@
 package com.example.sportapp;
 
 import android.os.Bundle;
+import android.widget.Toast;
 
 import androidx.activity.EdgeToEdge;
 import androidx.appcompat.app.AppCompatActivity;
@@ -13,7 +14,7 @@ import androidx.recyclerview.widget.RecyclerView;
 import java.util.ArrayList;
 import java.util.List;
 
-public class MainActivity extends AppCompatActivity {
+public class MainActivity extends AppCompatActivity implements ItemClickListener {
 
     // Déclarez ces composants
     RecyclerView recyclerView;
@@ -52,9 +53,20 @@ public class MainActivity extends AppCompatActivity {
         recyclerView.setLayoutManager(new LinearLayoutManager(this));
 
         // Crée l'adapteur
-        adapter = new CustomAdapter(sportList);
+        adapter = new CustomAdapter(this, sportList);
 
         // Lie le recyclerView a l'adapteur
         recyclerView.setAdapter(adapter);
     }
+
+    @Override
+    public void onItemClick(int position) {
+        Sport clickedSport = sportList.get(position);
+        Toast.makeText(
+                this,
+                "You clicked: " + clickedSport.getSportName(),
+                Toast.LENGTH_SHORT
+        ).show();
+    }
+
 }

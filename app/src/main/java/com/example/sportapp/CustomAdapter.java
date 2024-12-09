@@ -17,7 +17,10 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.SportsView
     // Crée la liste d'éléments
     private List<Sport> sportList;
 
-    public CustomAdapter(List<Sport> sportList) {
+    private ItemClickListener clickListener;
+
+    public CustomAdapter(ItemClickListener clickListener, List<Sport> sportList) {
+        this.clickListener = clickListener;
         this.sportList = sportList;
     }
 
@@ -29,7 +32,7 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.SportsView
                 .from(parent.getContext())
                 .inflate(R.layout.card_item_layout, parent, false);
 
-        return new SportsViewHolder(itemView);
+        return new SportsViewHolder(itemView, clickListener);
     }
 
     @Override
@@ -48,17 +51,30 @@ public class CustomAdapter extends RecyclerView.Adapter<CustomAdapter.SportsView
     }
 
 
-    public static class SportsViewHolder extends RecyclerView.ViewHolder {
+    public static class SportsViewHolder extends RecyclerView.ViewHolder implements View.OnClickListener {
         //1-  Liaison de réference des composants dans la vue d'un élément
 
         TextView textView;
         ImageView imageView;
+        ItemClickListener itemClickListener;
 
-        public SportsViewHolder(@NonNull View itemView) {
+        public SportsViewHolder(@NonNull View itemView, ItemClickListener clickListener) {
             super(itemView);
 
             textView = itemView.findViewById(R.id.textView);
             imageView = itemView.findViewById(R.id.imageViewCard);
+            this.itemClickListener = clickListener;
+
+            itemView.setOnClickListener(this);
+
+        }
+
+
+        @Override
+        public void onClick(View v) {
+            if (itemClickListener != null){
+                itemClickListener.onItemClick(getAdapterPosition());
+            }
         }
     }
 }
